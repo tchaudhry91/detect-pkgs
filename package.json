@@ -1,0 +1,26 @@
+{
+  "name": "detect-pkgs",
+  "version": "1.0.0",
+  "description": "A simple script to detect os packages required to run bash scripts.",
+  "main": "detect.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tchaudhry91/detect-pkgs.git"
+  },
+  "keywords": [
+    "detect",
+    "bash"
+  ],
+  "author": "Tanmay Chaudhry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tchaudhry91/detect-pkgs/issues"
+  },
+  "homepage": "https://github.com/tchaudhry91/detect-pkgs#readme",
+  "dependencies": {
+    "bash-parser": "^0.5.0"
+  }
+}
