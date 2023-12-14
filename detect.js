@@ -1,6 +1,6 @@
 const parser = require("bash-parser");
 const fs = require("node:fs");
-const { exec } = require("child_process");
+const { execSync } = require("child_process");
 
 function getPkgs(cmds) {
   let pkgs = new Set();
@@ -26,28 +26,21 @@ function filterCommandTypesRecursive(ast) {
   return cmds;
 }
 
-function checkCommandDeps(cmd, install) {
+function checkCommandDeps(cmd) {
   // Check if the command is already available
-  exec(`which ${cmd}`, (error, stdout, stderr) => {
-    if (!error) {
-      return [];
+  try {
+    console.log("Checking for command:" + cmd);
+    execSync(`which ${cmd}`);
+    return [];
+  } catch (e) {
+    try {
+      execSync(`apk add ${cmd}`);
+      execSync(`which ${cmd}`);
+      return [cmd];
+    } catch (e) {
+      return null;
     }
-    // check if we can install a package with the same name and then get the command working
-    // a better version would be apt-file like alternative, but that doesn't yet exist for alpine
-    // In most cases this should be enough.
-    if (install) {
-      exec(`apk add ${cmd}`),
-        (error, stdout, stderr) => {
-          if (!error) {
-            // Retry
-            return checkCommandDeps(cmd, false);
-          }
-        };
-    }
-
-    // If nothing else, print a fail message but do not exit
-    console.log("Could not resolve package for command:" + cmd);
-  });
+  }
 }
 
 try {
@@ -59,8 +52,17 @@ try {
 
   var deps = new Set();
   pkgs.forEach((p) => {
-    checkCommandDeps(p, true);
+    let packs = checkCommandDeps(p, true);
+    // this means detection failed
+    if (packs == null) {
+      console.error("Exiting..Could not detect package for :" + p);
+      process.exit(1);
+    }
+    packs.forEach((pack) => {
+      deps.add(pack);
+    });
   });
+  console.log(deps);
 } catch (err) {
   console.error(err);
 }
