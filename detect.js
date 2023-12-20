@@ -29,7 +29,6 @@ function filterCommandTypesRecursive(ast) {
 function checkCommandDeps(cmd) {
   // Check if the command is already available
   try {
-    console.log("Checking for command:" + cmd);
     execSync(`which ${cmd}`);
     return [];
   } catch (e) {
