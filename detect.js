@@ -5,7 +5,7 @@ const { execSync } = require("child_process");
 function getPkgs(cmds) {
   let pkgs = new Set();
   cmds.forEach((c) => {
-    if (c.name.text) {
+    if (c.name) {
       pkgs.add(c.name.text);
     }
   });
