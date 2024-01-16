@@ -15,11 +15,15 @@ function filterCommandTypesRecursive(ast) {
   if (ast.hasOwnProperty("commands")) {
     ast.commands.forEach((c) => {
       if (c.type === "Command") {
-        cmds.push(c);
+	if (c.name) {
+          cmds.push(c);
+	}
       }
       if (c.type === "Pipeline") {
         let local = filterCommandTypesRecursive(c);
-        cmds.push(...local);
+	if (local.name) {
+          cmds.push(...local);
+	}
       }
     });
   }
