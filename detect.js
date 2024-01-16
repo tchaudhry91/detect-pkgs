@@ -5,7 +5,9 @@ const { execSync } = require("child_process");
 function getPkgs(cmds) {
   let pkgs = new Set();
   cmds.forEach((c) => {
-    pkgs.add(c.name.text);
+    if (c.name.text) {
+      pkgs.add(c.name.text);
+    }
   });
   return pkgs;
 }
@@ -15,15 +17,11 @@ function filterCommandTypesRecursive(ast) {
   if (ast.hasOwnProperty("commands")) {
     ast.commands.forEach((c) => {
       if (c.type === "Command") {
-	if (c.name) {
-          cmds.push(c);
-	}
+        cmds.push(c);
       }
       if (c.type === "Pipeline") {
         let local = filterCommandTypesRecursive(c);
-	if (local.name) {
-          cmds.push(...local);
-	}
+        cmds.push(...local);
       }
     });
   }
