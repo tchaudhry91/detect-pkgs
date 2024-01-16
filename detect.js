@@ -61,7 +61,10 @@ try {
       deps.add(pack);
     });
   });
-  console.log(JSON.stringify([...deps]));
+  let result = {
+    "deps" = [...deps]
+  };
+  console.log(JSON.stringify(result));
 } catch (err) {
   console.error(err);
 }
