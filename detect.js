@@ -62,7 +62,7 @@ try {
     });
   });
   let result = {
-    "deps" = [...deps]
+    deps: [...deps]
   };
   console.log(JSON.stringify(result));
 } catch (err) {
