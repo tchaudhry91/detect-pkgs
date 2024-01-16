@@ -25,7 +25,6 @@ function filterCommandTypesRecursive(ast) {
             if (cm.expansion) {
               cm.expansion.forEach((subAST) => {
                 if (subAST.commandAST) {
-                  console.log(subAST.commandAST);
                   let local = filterCommandTypesRecursive(subAST.commandAST);
                   cmds.push(...local);
                 }
@@ -65,7 +64,6 @@ try {
 
   let cmds = filterCommandTypesRecursive(ast);
   let pkgs = getPkgs(cmds);
-  console.log(pkgs);
 
   var deps = new Set();
   pkgs.forEach((p) => {
