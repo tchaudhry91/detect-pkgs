@@ -17,7 +17,22 @@ function filterCommandTypesRecursive(ast) {
   if (ast.hasOwnProperty("commands")) {
     ast.commands.forEach((c) => {
       if (c.type === "Command") {
-        cmds.push(c);
+        if (c.name) {
+          cmds.push(c);
+        }
+        if (c.prefix) {
+          c.prefix.forEach((cm) => {
+            if (cm.expansion) {
+              cm.expansion.forEach((subAST) => {
+                if (subAST.commandAST) {
+                  console.log(subAST.commandAST);
+                  let local = filterCommandTypesRecursive(subAST.commandAST);
+                  cmds.push(...local);
+                }
+              });
+            }
+          });
+        }
       }
       if (c.type === "Pipeline") {
         let local = filterCommandTypesRecursive(c);
@@ -50,6 +65,7 @@ try {
 
   let cmds = filterCommandTypesRecursive(ast);
   let pkgs = getPkgs(cmds);
+  console.log(pkgs);
 
   var deps = new Set();
   pkgs.forEach((p) => {
